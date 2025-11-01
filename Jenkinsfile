@@ -1,13 +1,11 @@
-pipeline{
+pipeline {
     agent {
         label 'j-agent'
     }
+    tools {
+        maven 'maven-352'
+    }
     stages{
-        stage("Check SCM"){
-            steps{
-                git branch: 'main', url: 'https://github.com/Hassan-Eid-Hassan/git-depi.git'
-            }
-        }
         stage("Build"){
             steps{
                 sh 'mvn package install'
