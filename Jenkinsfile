@@ -30,7 +30,7 @@ pipeline {
         stage("Push Docker"){
             steps{
                 sh "docker login -u ${dockerUsername} -p ${dockerPassword}"
-                sh "docker push hassaneid/java:v${BUILD_NUMBER}"
+                // sh "docker push hassaneid/java:v${BUILD_NUMBER}"
             }
         }
         stage("Deploy"){
