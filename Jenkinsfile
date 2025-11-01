@@ -39,4 +39,15 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            sh "echo "success""
+        }
+        failure {
+            sh "echo "failure""
+        }
+    }
 }
