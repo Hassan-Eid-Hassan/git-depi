@@ -33,11 +33,6 @@ pipeline {
                 // sh "docker push hassaneid/java:v${BUILD_NUMBER}"
             }
         }
-        stage("Deploy"){
-            steps{
-                sh "docker run -d -p 8090:8090 --name java-v${BUILD_NUMBER} hassaneid/java:v${BUILD_NUMBER}"
-            }
-        }
     }
     post {
         always {
