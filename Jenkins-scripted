@@ -1,5 +1,8 @@
 node("j-agent"){
     def mavenBin = tool name: 'maven-352', type: 'maven'
+    stage("Check SCM"){
+        git branch: 'main', url: 'https://github.com/Hassan-Eid-Hassan/git-depi.git'
+    }
     stage("Build"){
         env.PATH = "${mavenBin}/bin:${env.PATH}"
         sh 'mvn package install'
