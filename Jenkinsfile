@@ -44,10 +44,10 @@ pipeline {
             cleanWs()
         }
         success {
-            sh "echo "success""
+            echo "success"
         }
         failure {
-            sh "echo "failure""
+           echo "failure"
         }
     }
 }
