@@ -1,3 +1,4 @@
+@Library('depi')_
 pipeline {
     agent {
         label 'j-agent'
@@ -13,8 +14,10 @@ pipeline {
     stages{
         stage("Build"){
             steps{
-                sh "java --version"
-                sh 'mvn package install'
+                script{
+                    def depiMaven = new edu.iti.maven()
+                    depiMaven.maven("package install")
+                }
             }
         }
         stage("Archive"){
@@ -24,13 +27,19 @@ pipeline {
         }
         stage("Build Docker"){
             steps{
-                sh "docker build -t hassaneid/java:v${BUILD_NUMBER} ."
+                script{
+                    def depiDocker = new edu.iti.docker()
+                    depiDocker.build("hassaneid/java", "v${BUILD_NUMBER}")
+                }
             }
         }
         stage("Push Docker"){
             steps{
-                sh "docker login -u ${dockerUsername} -p ${dockerPassword}"
-                // sh "docker push hassaneid/java:v${BUILD_NUMBER}"
+                script{
+                    def depiDocker = new edu.iti.docker()
+                    depiDocker.login("${dockerUsername}", "${dockerPassword}")
+                    depiDocker.push("hassaneid/java", "v${BUILD_NUMBER}")
+                }
             }
         }
     }
