@@ -3,17 +3,13 @@ pipeline {
         label 'j-agent'
     }
     tools {
+        jdk 'jdk-11'
         maven 'maven-352'
     }
     stages{
         stage("Build"){
             steps{
                 sh 'mvn package install'
-            }
-        }
-        stage("Test"){
-            steps{
-                sh 'mvn test'
             }
         }
         stage("Archive"){
