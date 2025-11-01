@@ -17,7 +17,7 @@ pipeline {
                 script{
                     def javaVersion = sh(script: 'java --version | head -1 | cut -d " " -f 2 | cut -d . -f 1', returnStdout: true).trim()
                     if (javaVersion=="11"){
-                        error('Jave Version equal 11')
+                        error('Jave Version equal 21')
                     }
                     def depiMaven = new edu.iti.maven()
                     depiMaven.maven("package install")
