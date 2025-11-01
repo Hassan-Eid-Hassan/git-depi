@@ -1,0 +1,10 @@
+node("j-agent"){
+    def mavenBin = tool name: 'maven-352', type: 'maven'
+    stage("Build"){
+        // env.PATH = "${mavenBin}:${env.PATH}"
+        sh 'mvn package install'
+    }
+    stage("Test"){
+        sh 'mvn test'
+    }
+}
