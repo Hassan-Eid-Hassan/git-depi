@@ -1,61 +1,50 @@
-@Library('depi')_
-pipeline {
-    agent {
-        label 'j-agent'
+pipeline{
+    agent{
+        label 'java-agent-01'
     }
     tools {
-        jdk 'jdk-11'
         maven 'maven-352'
-    }
-    environment{
-        dockerUsername = credentials("docker-user")
-        dockerPassword = credentials("docker-pass")
-    }
+        jdk 'java-11'
+    }  
     stages{
-        stage("Build"){
+        stage("Build App"){
             steps{
-                script{
-                    def javaVersion = sh(script: 'java --version | head -1 | cut -d " " -f 2 | cut -d . -f 1', returnStdout: true).trim()
-                    if (javaVersion=="21"){
-                        error('Jave Version equal 21')
-                    }
-                    def depiMaven = new edu.iti.maven()
-                    depiMaven.maven("package install")
-                }
+                sh 'java --version'
+                sh 'mvn package install -DskipTests'
             }
         }
-        stage("Archive"){
+        stage("Archive App"){
             steps{
-                archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
+                archiveArtifacts artifacts: '**/*.jar'
             }
         }
-        stage("Build Docker"){
+        stage("Upload to nexus"){
             steps{
-                script{
-                    def depiDocker = new edu.iti.docker()
-                    depiDocker.build("hassaneid/java", "v${BUILD_NUMBER}")
-                }
+                nexusArtifactUploader(
+                    artifacts: [[
+                    artifactId: 'demo1',
+                    classifier: '',
+                    file: '**/*.jar',
+                    type: 'jar']],
+                    credentialsId: 'nexus-user-pass',
+                    groupId: 'com.example',
+                    nexusUrl: '192.168.61.142:8081',
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    repository: 'http://192.168.61.142:8081/repository/maven-snapshots/',
+                    version: '0.0.1-SNAPSHOT'
+                )
             }
         }
-        // stage("Push Docker"){
+        // stage("Build Docker Image"){
         //     steps{
-        //         script{
-        //             def depiDocker = new edu.iti.docker()
-        //             depiDocker.login("${dockerUsername}", "${dockerPassword}")
-        //             depiDocker.push("hassaneid/java", "v${BUILD_NUMBER}")
-        //         }
+        //         sh "docker build -t hassaneid/sysadmin-java:v${BUILD_NUMBER} ."
         //     }
         // }
-    }
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            echo "success"
-        }
-        failure {
-           echo "failure"
-        }
+        // stage("Push Docker Image"){
+        //     steps{
+        //         sh "docker push hassaneid/sysadmin-java:v${BUILD_NUMBER}"
+        //     }
+        // }
     }
 }
