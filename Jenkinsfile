@@ -20,32 +20,32 @@ pipeline{
         }
         stage("Upload to nexus"){
             steps{
-                // nexusArtifactUploader(
-                //     artifacts: [[
-                //     artifactId: 'demo1',
-                //     classifier: '',
-                //     file: 'target/demo1-0.0.1-SNAPSHOT.jar',
-                //     type: 'jar']],
-                //     credentialsId: 'nexus-user-pass',
-                //     groupId: 'com.example',
-                //     nexusUrl: '192.168.61.142:8081',
-                //     nexusVersion: 'NEXUS3',
-                //     protocol: 'http',
-                //     repository: 'maven-snapshots',
-                //     version: '0.0.1-SNAPSHOT'
-                // )
                 nexusArtifactUploader(
-                    nexusVersion: 'NEXUS3',
-                    protocol: 'HTTP',
-                    nexusUrl: '192.168.61.142:8081',
-                    groupId: 'com.example',
-                    version: '0.0.1-SNAPSHOT',
-                    repository: 'maven-snapshots',
+                    artifacts: [[
                     artifactId: 'demo1',
-                    type: 'jar',
-                    file: "target/demo1-0.0.1-SNAPSHOT.jar",
-                    credentialsId: 'nexus-user-pass'
+                    classifier: '',
+                    file: 'target/demo1-0.0.1-SNAPSHOT.jar',
+                    type: 'jar']],
+                    credentialsId: 'nexus-user-pass',
+                    groupId: 'com.example',
+                    nexusUrl: '192.168.61.142:8081',
+                    nexusVersion: 'NEXUS3',
+                    protocol: 'http',
+                    repository: 'maven-snapshots',
+                    version: '0.0.1-SNAPSHOT'
                 )
+                // nexusArtifactUploader(
+                //     nexusVersion: 'NEXUS3',
+                //     protocol: 'HTTP',
+                //     nexusUrl: '192.168.61.142:8081',
+                //     groupId: 'com.example',
+                //     version: '0.0.1-SNAPSHOT',
+                //     repository: 'maven-snapshots',
+                //     artifactId: 'demo1',
+                //     type: 'jar',
+                //     file: "target/demo1-0.0.1-SNAPSHOT.jar",
+                //     credentialsId: 'nexus-user-pass'
+                // )
             }
         }
         // stage("Build Docker Image"){
