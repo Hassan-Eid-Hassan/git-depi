@@ -20,20 +20,31 @@ pipeline{
         }
         stage("Upload to nexus"){
             steps{
-                nexusArtifactUploader(
-                    artifacts: [[
-                    artifactId: 'demo1',
-                    classifier: '',
-                    file: 'target/demo1-0.0.1-SNAPSHOT.jar',
-                    type: 'jar']],
-                    credentialsId: 'nexus-user-pass',
-                    groupId: 'com.example',
-                    nexusUrl: '192.168.61.142:8081',
-                    nexusVersion: 'NEXUS3',
-                    protocol: 'http',
-                    repository: 'maven-snapshots',
-                    version: '0.0.1-SNAPSHOT'
-                )
+                // nexusArtifactUploader(
+                //     artifacts: [[
+                //     artifactId: 'demo1',
+                //     classifier: '',
+                //     file: 'target/demo1-0.0.1-SNAPSHOT.jar',
+                //     type: 'jar']],
+                //     credentialsId: 'nexus-user-pass',
+                //     groupId: 'com.example',
+                //     nexusUrl: '192.168.61.142:8081',
+                //     nexusVersion: 'NEXUS3',
+                //     protocol: 'http',
+                //     repository: 'maven-snapshots',
+                //     version: '0.0.1-SNAPSHOT'
+                // )
+                withCredentials([usernamePassword(credentialsId: 'nexus-user-pass', passwordVariable: 'PASS_WORD', usernameVariable: 'USER_NAME')]) {
+                    sh """
+                        curl -v -u ${USER_NAME}:${PASS_WORD} \
+                        -X POST ’http://192.168.61.142:8081/service/rest/v1/components?repository=maven-snapshots' \
+                        -F maven2.groupId=com.example \
+                        -F maven2.artifactId=demo1 \
+                        -F maven2.version=0.0.1-SNAPSHOT \
+                        -F maven2.asset1=@target/demo1-0.0.1-SNAPSHOT.jar \
+                        -F maven2.asset1.extension=jar
+                    """
+                }
                 // nexusArtifactUploader(
                 //     nexusVersion: 'NEXUS3',
                 //     protocol: 'HTTP',
