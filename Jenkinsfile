@@ -37,7 +37,7 @@ pipeline{
                 withCredentials([usernamePassword(credentialsId: 'nexus-user-pass', passwordVariable: 'PASS_WORD', usernameVariable: 'USER_NAME')]) {
                     sh """
                         curl -v -u ${USER_NAME}:${PASS_WORD} \
-                        -X POST ’http://192.168.61.142:8081/service/rest/v1/components?repository=maven-snapshots' \
+                        -X POST 'http://192.168.61.142:8081/service/rest/v1/components?repository=maven-snapshots' \
                         -F maven2.groupId=com.example \
                         -F maven2.artifactId=demo1 \
                         -F maven2.version=0.0.1-SNAPSHOT \
