@@ -24,7 +24,7 @@ pipeline{
                     artifacts: [[
                     artifactId: 'demo1',
                     classifier: '',
-                    file: '**/*.jar',
+                    file: 'target/demo1-0.0.1-SNAPSHOT.jar',
                     type: 'jar']],
                     credentialsId: 'nexus-user-pass',
                     groupId: 'com.example',
