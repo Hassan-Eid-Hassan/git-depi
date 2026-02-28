@@ -25,12 +25,12 @@ pipeline{
         }
         stage("Build Docker Image") {
             steps {
-                sh "docker build -t java-app:v${BUILD_NUMBER} ."
+                sh "docker build -t hassaneid/depi-java:v${BUILD_NUMBER} ."
             }
         }
         stage("Push Image") {
                 sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                sh "docker push java-app:v${BUILD_NUMBER}"
+                sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
             }
         }
     }
