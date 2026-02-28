@@ -29,8 +29,10 @@ pipeline{
             }
         }
         stage("Push Image") {
-            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-            sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
+            steps {
+                sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
+            }
         }
     }
 }
