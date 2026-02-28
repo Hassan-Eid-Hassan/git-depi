@@ -19,7 +19,7 @@ pipeline{
         }
         stage("Build Docker Image") {
             steps {
-                sh "docker build -t java-app:${DOCKER_TAG_VERSION} ."
+                sh "docker build -t java-app:${BUILD_NUMBER} ."
             }
         }
     }
