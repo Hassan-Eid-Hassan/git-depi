@@ -34,11 +34,19 @@ pipeline{
         //         sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
         //     }
         // }
-        stage("Deploy Java App") {
+        // stage("Deploy Docker Java App") {
+        //     steps {
+        //         sh """
+        //         docker rm -f depi-java
+        //         docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
+        //         """
+        //     }
+        // }
+        stage("Deploy k8s Java App") {
             steps {
                 sh """
-                docker rm -f depi-java
-                docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
+                    sed -i "s#.*image:.*#    image: hassaneid/depi-java:v${BUILD_NUMBER}#g" deployment.yaml
+                    cat deployment.yaml
                 """
             }
         }
