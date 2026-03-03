@@ -1,3 +1,5 @@
+@Library('depi-r4')_
+
 pipeline{
     agent {
         label "agent-01"
@@ -14,34 +16,45 @@ pipeline{
     stages {
         stage("Build Application") {
             steps {
-                sh "echo ${DEPI_ROUND}"
-                sh "mvn package install -DskipTests"
+                script {
+                    def mavenFuns = new io.depi.maven()
+                    mavenFuns.JavaBuild("-DskipTests")
+                }
             }
         }
         stage("Test Application") {
             steps {
-                sh "mvn test"
+                script {
+                    def mavenFuns = new io.depi.maven()
+                    mavenFuns.JavaTest("")
+                }
             }
         }
         stage("Build Docker Image") {
             steps {
-                sh "docker build -t hassaneid/depi-java:v${BUILD_NUMBER} ."
+                script{
+                    def dockerFuns = new io.depi.docker()
+                    dockerFuns.build("hassaneid/depi-java", "v${BUILD_NUMBER}")
+                }
             }
         }
-        // stage("Push Image") {
-        //     steps {
-        //         sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-        //         sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
-        //     }
-        // }
-        // stage("Deploy Docker Java App") {
-        //     steps {
-        //         sh """
-        //         docker rm -f depi-java
-        //         docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
-        //         """
-        //     }
-        // }
+        stage("Push Image") {
+            steps {
+                script{
+                    def dockerFuns = new io.depi.docker()
+                    dockerFuns.login("${DOCKER_USERNAME}", "${DOCKER_PASSWORD}")
+                    dockerFuns.push("hassaneid/depi-java", "v${BUILD_NUMBER}")
+                }
+            }
+        }
+        stage("Deploy Docker Java App") {
+            steps {
+                sh """
+                docker rm -f depi-java
+                docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
+                """
+            }
+        }
         stage("Deploy k8s Java App") {
             steps {
                 sh """
