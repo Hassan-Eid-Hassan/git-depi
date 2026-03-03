@@ -6,7 +6,6 @@ node("agent-01"){
         sh 'echo "not now"'
     }
     stage("Build Application") {
-            sh "echo ${DEPI_ROUND}"
             sh "mvn package install -DskipTests"
     }
     stage("Test Application") {
