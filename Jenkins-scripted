@@ -1,7 +1,7 @@
 node("agent-01"){
     def javaJdk = tool name: 'JDK-11', type: 'jdk'
     def maven = tool name: 'maven-3-5-4', type: 'maven'
-    env.PATH = ${maven}/bin:${env.PATH}
+    def env.PATH = ${maven}/bin:${env.PATH}
 
     stage("Checkout SCM"){
         sh 'echo "not now"'
