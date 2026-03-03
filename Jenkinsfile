@@ -28,10 +28,15 @@ pipeline{
                 sh "docker build -t hassaneid/depi-java:v${BUILD_NUMBER} ."
             }
         }
-        stage("Push Image") {
+        // stage("Push Image") {
+        //     steps {
+        //         sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+        //         sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
+        //     }
+        // }
+        stage("Deploy Java App") {
             steps {
-                sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                sh "docker push hassaneid/depi-java:v${BUILD_NUMBER}"
+                sh "docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}"
             }
         }
     }
