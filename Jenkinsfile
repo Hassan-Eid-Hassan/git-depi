@@ -36,7 +36,10 @@ pipeline{
         // }
         stage("Deploy Java App") {
             steps {
-                sh "docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}"
+                sh """
+                docker rm -f depi-java
+                docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
+                """
             }
         }
     }
