@@ -57,10 +57,13 @@ pipeline{
         // }
         stage("Deploy k8s Java App") {
             steps {
+                git branch: 'main', url: 'https://github.com/Hassan-Eid-Hassan/java-cd.git'
                 sh """
-                    sed -i "s#.*image:.*#        image: hassaneid/depi-java:v${BUILD_NUMBER}#g" java-app-all.yaml
-                    scp java-app-all.yaml jenkins@192.168.177.142:/home/jenkins
-                    ssh jenkins@192.168.177.142 "kubectl apply -f java-app-all.yaml"
+                    cd java-cd
+                    sed -i "s#.*image:.*#        image: hassaneid/depi-java:v${BUILD_NUMBER}#g" java-app/deployment.yaml
+                    git add java-app/deployment.yaml
+                    git commit -m "change image version to v${BUILD_NUMBER} by jenkins"
+                    git push
                 """
             }
         }
