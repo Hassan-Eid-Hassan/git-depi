@@ -58,7 +58,7 @@ pipeline{
         stage("Deploy k8s Java App") {
             steps {
                 sh """
-                    sed -i "s#.*image:.*#    image: hassaneid/depi-java:v${BUILD_NUMBER}#g" java-app-all.yaml
+                    sed -i "s#.*image:.*#        image: hassaneid/depi-java:v${BUILD_NUMBER}#g" java-app-all.yaml
                     scp java-app-all.yaml jenkins@192.168.177.142:/home/jenkins
                     ssh jenkins@192.168.177.142 "kubectl apply -f java-app-all.yaml"
                 """
