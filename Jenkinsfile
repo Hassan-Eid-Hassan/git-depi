@@ -57,15 +57,14 @@ pipeline{
         // }
         stage("Deploy k8s Java App") {
             steps {
-                sh "cd java-cd"
-                git branch: 'main', url: 'git@github.com:Hassan-Eid-Hassan/java-cd.git'
                 sh """
+                    if [ -d "java-cd" ]; then cd java-cd && git pull; else git clone git@github.com:Hassan-Eid-Hassan/java-cd.git && cd java-cd; fi
                     git config user.email "hassaneid339@gmail.com"
                     git config user.name "Hassan-Eid-Hassan"
                     sed -i "s#.*image:.*#        image: hassaneid/depi-java:v${BUILD_NUMBER}#g" java-app/deployment.yaml
                     git add java-app/deployment.yaml
                     git commit -m "change image version to v${BUILD_NUMBER} by jenkins"
-                    git push
+                    git push origin main
                 """
             }
         }
