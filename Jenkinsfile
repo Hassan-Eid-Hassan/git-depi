@@ -47,19 +47,20 @@ pipeline{
                 }
             }
         }
-        stage("Deploy Docker Java App") {
-            steps {
-                sh """
-                docker rm -f depi-java
-                docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
-                """
-            }
-        }
+        // stage("Deploy Docker Java App") {
+        //     steps {
+        //         sh """
+        //         docker rm -f depi-java
+        //         docker run -d -p 8090:8090 --name depi-java hassaneid/depi-java:v${BUILD_NUMBER}
+        //         """
+        //     }
+        // }
         stage("Deploy k8s Java App") {
             steps {
                 sh """
-                    sed -i "s#.*image:.*#    image: hassaneid/depi-java:v${BUILD_NUMBER}#g" deployment.yaml
-                    cat deployment.yaml
+                    sed -i "s#.*image:.*#    image: hassaneid/depi-java:v${BUILD_NUMBER}#g" java-app-all.yaml
+                    scp java-app-all.yaml jenkins@192.168.177.142:/home/jenkins
+                    ssh jenkins@192.168.177.142 "kubectl apply -f java-app-all.yaml"
                 """
             }
         }
