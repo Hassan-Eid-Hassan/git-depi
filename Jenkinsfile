@@ -57,6 +57,7 @@ pipeline{
         // }
         stage("Deploy k8s Java App") {
             steps {
+                sh "cd java-cd"
                 git branch: 'main', url: 'git@github.com:Hassan-Eid-Hassan/java-cd.git'
                 sh """
                     git config user.email "hassaneid339@gmail.com"
