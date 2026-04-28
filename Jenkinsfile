@@ -15,7 +15,7 @@ pipeline{
     }
     stages {
         stage('SonarQube Analysis') {
-            withSonarQubeEnv() {
+            steps{
                 sh "mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Depi -Dsonar.projectName='Depi'"
             }
         }
