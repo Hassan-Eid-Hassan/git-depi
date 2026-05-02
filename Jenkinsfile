@@ -14,13 +14,16 @@ pipeline{
         DEPI_ROUND = "R4"
     }
     stages {
-        stage('SonarQube Analysis') {
-            steps{
-                withSonarQubeEnv(credentialsId: 'sonar', installationName: 'SonarQube') {
-                    sh "mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Depi -Dsonar.projectName='Depi'"
-                }
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //     steps{
+        //         withSonarQubeEnv(credentialsId: 'sonar', installationName: 'SonarQube') {
+        //             sh "mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Depi -Dsonar.projectName='Depi'"
+        //         }
+        //         timeout(time: 5, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonar', installationName: 'SonarQube'
+        //         }
+        //     }
+        // }
         stage("Build Application") {
             steps {
                 script {

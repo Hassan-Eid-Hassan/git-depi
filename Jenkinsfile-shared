@@ -1,0 +1,37 @@
+@Library('depi')_
+
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk-11'
+        maven 'mvn-3-5-4'
+    }
+
+    stages {
+        stage('Build java') {
+            steps {
+                script {
+                    def abdel = new com.depi.mvnClass()
+                    abdel.packgeJar("-DskipTests")
+                }
+            }
+        }
+        stage('Test java') {
+            steps {
+                script {
+                    def abdel = new com.depi.mvnClass()
+                    abdel.testJar()
+                }
+            }
+        }
+        stage('Build docker') {
+            steps {
+                script {
+                    def dockerAbdel = new com.depi.dockerClass()
+                    dockerAbdel.dockerBuild("hassaneid/depi-java", "v${BUILD_NUMBER}")
+                }
+            }
+        }
+    }
+}
